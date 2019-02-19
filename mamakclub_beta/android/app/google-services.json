@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "751831182146",
+    "firebase_url": "https://mamakclub-72f11.firebaseio.com",
+    "project_id": "mamakclub-72f11",
+    "storage_bucket": "mamakclub-72f11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751831182146:android:77551ba37195437d",
+        "android_client_info": {
+          "package_name": "com.example.mamakclubbeta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751831182146-9ruuj5gki6cv189r9uod1q891g67drdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvDWqnI3pZL71kNjA7YVTZMBPAdrA46yA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751831182146:android:8422bf3f618ae27b",
+        "android_client_info": {
+          "package_name": "tv.lokann.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751831182146-9ruuj5gki6cv189r9uod1q891g67drdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvDWqnI3pZL71kNjA7YVTZMBPAdrA46yA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
