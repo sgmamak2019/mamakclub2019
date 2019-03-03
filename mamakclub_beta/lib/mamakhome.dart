@@ -52,6 +52,10 @@ class HomePageLayoutState extends State<HomePageLayout> {
         break;
       case "fx":
       case "fx_my" :
+        // I did the same here.
+        //it would have been great if we can add "images for the currency pair"
+        //help check if you can have a link to an icon as part of your upload. this is so we can put flags here.
+        
         //return new FXLayout(collectionName: colname);
         return new FXAdvisorLayout(collectionName:colname);
         break;
