@@ -4,9 +4,15 @@ class MamakStyles {
   static TextStyle headerFooterSmallStyle() {
     return TextStyle(fontSize: 10, color: Colors.black);
   }
+  static TextStyle cardTitleStyle(){
+    return TextStyle(fontSize: 15, color: Colors.black);
+  }
 
   static TextStyle tableHeaderStyle() {
     return TextStyle(fontSize: 12, height: 1.0);
+  }
+  static TextStyle petrolStyle() {
+    return TextStyle(fontSize: 18, height: 1.0,fontWeight: FontWeight.bold);
   }
 
   static TextStyle expansionTitleStyle() {

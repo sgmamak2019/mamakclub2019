@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mamakclub_beta/collection.dart';
-import 'package:mamakclub_beta/petrol.dart';
-import 'package:mamakclub_beta/fx.dart';
+//import 'package:mamakclub_beta/petrol.dart';
+import 'package:mamakclub_beta/petroladvisor.dart';
+//import 'package:mamakclub_beta/fx.dart';
+import 'package:mamakclub_beta/fxadvisor.dart';
 import 'package:mamakclub_beta/fixed_deposit.dart';
 class HomePageLayoutState extends State<HomePageLayout> {
   
@@ -40,11 +42,18 @@ class HomePageLayoutState extends State<HomePageLayout> {
   Widget _getCurrentWidget(String colname) {
     switch (colname) {
       case "petrol":
-        return new PetrolLayout();
+        //HI jason, this is the petrol Advisor Layout(petroladvisor.dart).
+        //I made it, as a replacement for PetrolLayout(petrol.dart)
+        //petrol advisor lacks or icons. If you want the excel looking gui, 
+        //just replace the import to import petrol.dart
+        //use new PetrolLayout() instead of below.
+        //I also made "MamakCard" Component, which you can use...
+        return new PetrolAdvisorLayout();
         break;
       case "fx":
       case "fx_my" :
-        return new FXLayout(collectionName: colname);
+        //return new FXLayout(collectionName: colname);
+        return new FXAdvisorLayout(collectionName:colname);
         break;
       case "fixed_deposit_my":
        case "fixed_deposit_sg":
@@ -107,7 +116,6 @@ class HomePageLayoutState extends State<HomePageLayout> {
     return _buildScaffold(context);
   }
 }
-
 class HomePageLayout extends StatefulWidget {
   final String title;
   final String collectionName;
