@@ -1,6 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-class Record {
+class Petrol {
   final String price_no_discount;
   final String price_no_discount_company;
   final String price_with_discount;
@@ -8,7 +8,7 @@ class Record {
   final String snap_nicedate;
   final DocumentReference reference;
 
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
+  Petrol.fromMap(Map<String, dynamic> map, {this.reference})
       : price_no_discount =
             map['price-no-discount'] == null ? '' : map['price-no-discount'],
         price_no_discount_company = map['price-no-discount_company'] == null
@@ -23,7 +23,7 @@ class Record {
         snap_nicedate =
             map['snap_nicedate'] == null ? '' : map['snap_nicedate'];
 
-  Record.fromSnapShot(DocumentSnapshot snapshot)
+  Petrol.fromSnapShot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
