@@ -5,6 +5,7 @@ import 'package:mamakclub_beta/fxmodel.dart';
 import 'package:mamakclub_beta/mamakcard.dart';
 
 class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
+ 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
     final FX record = FX.fromSnapShot(data);
     if (data.documentID == "_info") {
@@ -19,6 +20,7 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
         leftSubTitle: record.buy_tt_company,
         rightSubTitle: record.sell_tt_company);
   }
+
   Widget _buildFirstLine(DocumentSnapshot snapshot) {
     FX datax = FX.fromSnapShot(snapshot);
     return new Align(
