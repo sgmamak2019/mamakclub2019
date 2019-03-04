@@ -10,6 +10,8 @@ class MamakCommons {
     Collection fxmy = new Collection();
     Collection fixed_sg = new Collection();
     Collection fixed_my = new Collection();
+    Collection traffic = new Collection();
+
     petrol.collectionName = "petrol";
     petrol.titleName = "Petrol";
     fxsg.collectionName = "fx";
@@ -31,6 +33,10 @@ class MamakCommons {
     collections.add(fxmy);
     collections.add(fixed_sg);
     collections.add(fixed_my);
+    traffic.collectionIcon = Icons.camera_alt;
+    traffic.collectionName = "traffic";
+    traffic.titleName = "Traffic Cams";
+    collections.add(traffic);
     return collections;
 
   }
