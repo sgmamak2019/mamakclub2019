@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mamakclub_beta/mamakstyles.dart';
-import 'package:mamakclub_beta/fxmodel.dart';
+import 'package:mamakclub_beta/src/models/fxmodel.dart';
 import 'package:mamakclub_beta/mamakcard.dart';
+import 'package:mamakclub_beta/src/blocs/fxbloc.dart';
 
 class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
  
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final FX record = FX.fromSnapShot(data);
-    if (data.documentID == "_info") {
-      return new Divider();
-    }
+  Widget _buildListItem(BuildContext context, FX data) {
+   // final FX record = FX.fromSnapShot(data);
+    //if (data.documentID == "_info") {
+     // return new Divider();
+   // }
     return new MamakCard(
-        cardTitle: data.documentID,
+        cardTitle: data.documentId,
         leftHeader: 'BUY',
         rightHeader: 'SELL',
-        leftValue: record.buy_tt,
-        rightValue: record.sell_tt,
-        leftSubTitle: record.buy_tt_company,
-        rightSubTitle: record.sell_tt_company);
+        leftValue: data.buy_tt,
+        rightValue: data.sell_tt,
+        leftSubTitle: data.buy_tt_company,
+        rightSubTitle: data.sell_tt_company);
   }
 
   Widget _buildFirstLine(DocumentSnapshot snapshot) {
@@ -40,7 +41,7 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
         });
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+  Widget _buildList( List<FX> snapshot) {
     List<Widget> forBuilding = new List<Widget>();
     forBuilding.add(_buildInfo(context));
     forBuilding
@@ -50,18 +51,27 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
         padding: const EdgeInsets.only(top: 20.0), children: forBuilding);
   }
 
-  Widget _buildBody(String collectionName) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection(collectionName).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return _buildList(context, snapshot.data.documents);
-        });
+  Widget _buildBody(BuildContext context,String collectionName) {
+    fxBloc.fetchAllSGFX();
+       return new Container(
+        child:StreamBuilder(
+          stream:fxBloc.allSGFx,
+          builder:(context,AsyncSnapshot<FXRecord> snapshot){
+            if (snapshot.hasData) {
+                return _buildList(snapshot.data.items);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+               return Center(child:CircularProgressIndicator());
+          }
+        )
+       );
+      
   }
 
   @override
   Widget build(BuildContext ctx) {
-    return _buildBody(widget.collectionName);
+    return _buildBody(ctx,widget.collectionName);
   }
 }
 

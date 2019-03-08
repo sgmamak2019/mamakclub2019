@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mamakclub_beta/mamakcommons.dart';
-
+class FXRecord{
+  List<FX> items;
+}
 class FX {
   final String unit;
   final String sell_tt_company;
@@ -13,8 +15,8 @@ class FX {
   final String buy_notes_company;
   final String sell_notes_company;
   final DocumentReference reference;
-
-  FX.fromMap(Map<String, dynamic> map, {this.reference})
+  final String documentId;
+  FX.fromMap(Map<String, dynamic> map, String docId,{this.reference})
       : unit = MamakCommons.getValue(map['unit']),
         sell_notes = MamakCommons.getValue(map['sell_notes']),
         sell_notes_company = MamakCommons.getValue(map['sell_notes_company']),
@@ -24,10 +26,11 @@ class FX {
         buy_tt_company = MamakCommons.getValue(map['buy_tt_company']),
         sell_tt = MamakCommons.getValue(map['sell_tt']),
         sell_tt_company = MamakCommons.getValue(map['sell_tt_company']),
-        snap_nice_date = MamakCommons.getValue(map['snap_nicedate']);
+        snap_nice_date = MamakCommons.getValue(map['snap_nicedate']),
+        documentId = docId;
 
   FX.fromSnapShot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data,snapshot.documentID, reference: snapshot.reference);
 
   @override
   String toString() => "Record<$sell_tt_company:$buy_tt_company>";

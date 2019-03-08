@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mamakclub_beta/collection.dart';
 import 'package:mamakclub_beta/petroladvisor.dart';
-import 'package:mamakclub_beta/fxadvisor.dart';
-import 'package:mamakclub_beta/fxadvisor_my.dart';
+import 'package:mamakclub_beta/src/ui/fxadvisor.dart';
+import 'package:mamakclub_beta/src/ui/fxadvisor_my.dart';
 import 'package:mamakclub_beta/fixed_deposit.dart';
 import 'package:mamakclub_beta/mamakcommons.dart';
-import 'package:mamakclub_beta/trafficcams.dart';
+import 'package:mamakclub_beta/src/ui/trafficcams.dart';
 
 class HomePageLayoutState extends State<HomePageLayout> {
   //_buildBody(currentCollection);
