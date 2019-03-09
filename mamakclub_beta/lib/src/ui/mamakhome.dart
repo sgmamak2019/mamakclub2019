@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mamakclub_beta/collection.dart';
-import 'package:mamakclub_beta/petroladvisor.dart';
+import 'package:mamakclub_beta/src/ui/petroladvisor.dart';
 import 'package:mamakclub_beta/src/ui/fxadvisor.dart';
 import 'package:mamakclub_beta/src/ui/fxadvisor_my.dart';
 import 'package:mamakclub_beta/fixed_deposit.dart';
@@ -76,9 +76,7 @@ class HomePageLayoutState extends State<HomePageLayout> {
         ),
       ),
     );
-    this
-        .collections
-        .forEach((c) => drawL.add(drawListItem(c, ctx, c.collectionIcon)));
+    this.collections.forEach((c) => drawL.add(drawListItem(c, ctx, c.collectionIcon)));
     return new ListView(padding: EdgeInsets.zero, children: drawL);
   }
 
@@ -95,14 +93,6 @@ class HomePageLayoutState extends State<HomePageLayout> {
   @override
   Widget build(BuildContext context) {
     initCollections();
-    //Hi Jason. 
-    //BuildScaffold builds a scaffold who's body is a page (widget)
-    //TO avoid code repetition of several times because most page requires a drawer. 
-    //THe ontap event of the links navigate to a new instance of this page and renders the body based on collection name,
-    // tap event of drawer does this : return new HomePageLayout(title: titlen,collectionName:colname);
-    //this returns a new instance of mamakhome intiated with collectionName attached to the "tapped" list item.
-    //so, if you tap FX(SG) a new instance of HOmePageLayout with property st to 'fx' is made.
-    //FX_MY requires a page of it's own because it's tabbed and existing scaffolding will make it look funny
     return _buildScaffold(context);
   }
 }

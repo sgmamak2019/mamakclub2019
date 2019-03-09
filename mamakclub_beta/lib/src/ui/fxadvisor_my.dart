@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mamakclub_beta/mamakstyles.dart';
+import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
 import 'package:mamakclub_beta/src/models/fxmodel.dart';
-import 'package:mamakclub_beta/mamakcard.dart';
+import 'package:mamakclub_beta/src/ui/mamakcard.dart';
 import 'package:mamakclub_beta/mamakcommons.dart';
 import 'package:mamakclub_beta/collection.dart';
-import 'package:mamakclub_beta/mamakhome.dart';
+import 'package:mamakclub_beta/src/ui/mamakhome.dart';
 import 'package:mamakclub_beta/src/blocs/fxbloc.dart';
 
 class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {

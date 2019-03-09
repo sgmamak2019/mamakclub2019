@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mamakclub_beta/mamakstyles.dart';
-import 'package:mamakclub_beta/petrolmodel.dart';
-import 'package:mamakclub_beta/mamakcard.dart';
+import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
+import 'package:mamakclub_beta/src/models/petrolmodel.dart';
+import 'package:mamakclub_beta/src/ui/mamakcard.dart';
+import 'package:mamakclub_beta/src/blocs/petrolbloc.dart';
 
 class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
-  Widget _buildColumnCard(BuildContext context, DocumentSnapshot data) {
-    final Petrol record = Petrol.fromSnapShot(data);
-    if (data.documentID == '_info') {
-      return new Divider();
-    }
+  Widget _buildColumnCard(BuildContext context, Petrol data) {
+    final Petrol record =data;
+    
     return new MamakCard(
-        cardTitle: data.documentID,
+        cardTitle: record.documentId,
         leftHeader: 'with Discount',
         rightHeader: 'No Discount',
         leftValue: record.price_with_discount,
@@ -38,11 +37,11 @@ class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
         });
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+  Widget _buildList(List<Petrol> snapshot) {
     List<Widget> forBuilding = new List<Widget>();
     forBuilding.add(_buildInfo(context));
     forBuilding.addAll(
-        snapshot.map((data) => _buildColumnCard(context, data)).toList());
+        snapshot.map((data) => _buildColumnCard(context,data)).toList());
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
       children: forBuilding,
@@ -50,12 +49,20 @@ class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
   }
 
   Widget _buildBody(String collectionName) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection(collectionName).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return _buildList(context, snapshot.data.documents);
-        });
+    petrolBloc.fetchAllPetrol();
+       return new Container(
+        child:StreamBuilder(
+          stream:petrolBloc.allPetrol,
+          builder:(context,AsyncSnapshot<PetrolRecord> snapshot){
+            if (snapshot.hasData) {
+                return _buildList(snapshot.data.items);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+               return Center(child:CircularProgressIndicator());
+          }
+        )
+       );
   }
 
   @override

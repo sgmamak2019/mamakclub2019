@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mamakclub_beta/mamakhome.dart';
+import 'package:mamakclub_beta/src/ui/mamakhome.dart';
 
 void main() => runApp(MyApp());
 

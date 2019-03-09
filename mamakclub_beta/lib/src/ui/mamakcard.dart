@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mamakclub_beta/mamakstyles.dart';
+import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
 
 class MamakCard extends StatelessWidget {
 final String cardTitle; 
