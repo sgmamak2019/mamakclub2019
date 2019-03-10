@@ -4,8 +4,10 @@ import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
 import 'package:mamakclub_beta/src/models/petrolmodel.dart';
 import 'package:mamakclub_beta/src/ui/mamakcard.dart';
 import 'package:mamakclub_beta/src/blocs/petrolbloc.dart';
-
+import 'package:mamakclub_beta/mamakcommons.dart';
 class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
+  MamakCommons mamakCommons = MamakCommons();
+
   Widget _buildColumnCard(BuildContext context, Petrol data) {
     final Petrol record =data;
     
@@ -67,13 +69,18 @@ class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
 
   @override
   Widget build(BuildContext ctx) {
-    return _buildBody(widget.collectionName);
+   return Scaffold(
+        drawer: mamakCommons.getMamakDrawer(ctx),
+        appBar: AppBar(
+          title: Text('Petrol'),
+        ),
+        body: _buildBody("petrol")
+      );
   }
 }
-
 class PetrolAdvisorLayout extends StatefulWidget {
-  final String collectionName = "petrol";
-
-  @override
+  String collectionName = "petrol";
+  PetrolAdvisorLayout({Key key, @required this.collectionName}):super(key:key);
+ @override
   PetrolAdvisorLayoutState createState() => new PetrolAdvisorLayoutState();
 }

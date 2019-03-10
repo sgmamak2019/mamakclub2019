@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
-import 'package:mamakclub_beta/fixeddepositmodel.dart';
+import 'package:mamakclub_beta/src/models/fixeddepositmodel.dart';
 
 class FixedDepositLayoutState extends State<FixedDepositLayout> {
     

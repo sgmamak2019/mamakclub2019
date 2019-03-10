@@ -16,6 +16,7 @@ class FX {
   final String sell_notes_company;
   final DocumentReference reference;
   final String documentId;
+
   FX.fromMap(Map<String, dynamic> map, String docId,{this.reference})
       : unit = MamakCommons.getValue(map['unit']),
         sell_notes = MamakCommons.getValue(map['sell_notes']),

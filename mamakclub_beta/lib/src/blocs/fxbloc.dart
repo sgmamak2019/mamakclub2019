@@ -10,6 +10,7 @@ class FXBloc {
   final _fxMYFetcher = PublishSubject<FXRecord>();
   List<FX> fxSGLocal;
   List<FX> fxMYLocal;
+  String currentFilter="";
 
   Observable<FXRecord> get allSGFx => _fxSGFetcher.stream;
   Observable<FXRecord> get allMYFx => _fxMYFetcher.stream;
@@ -42,14 +43,14 @@ class FXBloc {
   fetchAllMYFXFilter(String currency) {
     FXRecord returnee = new FXRecord();
     returnee.items = narrowDown(fxMYLocal, currency);
-    _fxSGFetcher.sink.add(returnee);
+    _fxMYFetcher.sink.add(returnee);
   }
   List<FX> narrowDown(List<FX> local, String curr) {
     List<FX> fxList = new List<FX>();
     //had to resort to this because iterators and foreach wnt allow me to put conditions
     //whereiterable.toList() also doesn't work.
     for (var x = 0; x < local.length; x++) {
-      if (local.elementAt(x).documentId.contains(curr)) {
+      if (local.elementAt(x).documentId.toUpperCase().contains(curr.toUpperCase())) {
         fxList.add(local.elementAt(x));
       }
     }
@@ -58,6 +59,7 @@ class FXBloc {
  dispose() {
     //4. Dispose
     _fxSGFetcher.close();
+    _fxMYFetcher.close();
   }
 }
 

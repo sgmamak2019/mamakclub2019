@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mamakclub_beta/src/models/govpost.dart';
 import 'package:mamakclub_beta/src/blocs/trafficcamsbloc.dart';
-
+import 'package:mamakclub_beta/mamakcommons.dart';
 
 class TrafficCamsLayoutState extends State<TrafficCamsLayout> {
-  @override
-  Widget build(BuildContext context) {
-    trafficCamBloc.fetchAllCams();
+  MamakCommons mamakCommons =MamakCommons();
+
+  Widget _buildBody(BuildContext ctx){
     return new Container(
         child:StreamBuilder(
           stream :trafficCamBloc.allCams,
@@ -20,7 +20,19 @@ class TrafficCamsLayoutState extends State<TrafficCamsLayout> {
           }
         ),
     );
-      
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    trafficCamBloc.fetchAllCams();
+    return Scaffold(
+        drawer: mamakCommons.getMamakDrawer(context),
+        appBar: AppBar(
+          title: Text('Traffic Cameras [SG]'),
+        ),
+        body: _buildBody(context)
+      );
+    /**/
   }
 }
 Widget _buildCardItem(TrafficCam camItem){

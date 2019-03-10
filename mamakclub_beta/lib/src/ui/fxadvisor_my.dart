@@ -4,11 +4,33 @@ import 'package:mamakclub_beta/src/ui/mamakstyles.dart';
 import 'package:mamakclub_beta/src/models/fxmodel.dart';
 import 'package:mamakclub_beta/src/ui/mamakcard.dart';
 import 'package:mamakclub_beta/mamakcommons.dart';
-import 'package:mamakclub_beta/collection.dart';
-import 'package:mamakclub_beta/src/ui/mamakhome.dart';
 import 'package:mamakclub_beta/src/blocs/fxbloc.dart';
 
 class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
+
+  MamakCommons mamakCommons = MamakCommons();
+  void showBottomModal(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (ctx) {
+          return Container(
+              color: Colors.white10,
+              height: 400.0,
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(30.0),
+                          topRight: const Radius.circular(10))),
+                  child: TextField(
+                    autofocus: true,
+                    onChanged: (text) {
+                      fxBloc.currentFilter = text;
+                      fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+                    },
+                  )));
+        });
+  }
+
   Widget _buildListItem(FX data, String mode) {
     final FX record = data;
 
@@ -54,6 +76,25 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
 
   Widget _buildList(List<FX> snapshot, String mode) {
     List<Widget> forBuilding = new List<Widget>();
+    if (fxBloc.currentFilter != "") {
+      forBuilding.add(
+        FlatButton(
+          onPressed: () {
+            fxBloc.currentFilter = "";
+            fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+          },
+          color: Colors.blueGrey,
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            // Replace with a Row for horizontal icon + text
+            children: <Widget>[
+              Text("Clear Filter: " + fxBloc.currentFilter,
+                  style: TextStyle(color: Colors.white))
+            ],
+          ),
+        ),
+      );
+    }
     forBuilding.add(_buildInfo(context));
 
     forBuilding
@@ -64,7 +105,9 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
   }
 
   Widget _buildBody(String collectionName, String mode) {
-    fxBloc.fetchAllMYFX();
+    if (fxBloc.currentFilter == "") {
+      fxBloc.fetchAllMYFX();
+    }
     return new Container(
         child: StreamBuilder(
             stream: fxBloc.allMYFx,
@@ -78,51 +121,6 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
             }));
   }
 
-  Widget drawListItem(
-      Collection collectionData, BuildContext ctx, IconData icon) {
-    return new ListTile(
-        title: Text(collectionData.titleName),
-        leading: Icon(icon),
-        onTap: () {
-          setState(() {
-            Navigator.of(ctx).pop();
-
-            if (collectionData.collectionName == "fx_my") {
-              Navigator.of(ctx).push(MaterialPageRoute(
-                  builder: (BuildContext context) => new FXAdvisorLayoutMY(
-                      collectionName: collectionData.collectionName)));
-            } else {
-              Navigator.of(ctx).push(MaterialPageRoute(
-                  builder: (BuildContext context) => new HomePageLayout(
-                      title: collectionData.titleName,
-                      collectionName: collectionData.collectionName)));
-            }
-          });
-        });
-  }
-
-  Widget _drawerList(BuildContext ctx, List<Collection> coll) {
-    List<Widget> drawL = new List<Widget>();
-    drawL.add(
-      new Container(
-        height: 100,
-        child: DrawerHeader(
-          child: Column(children: [
-            Text(
-              'Mamak Club',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            )
-          ]),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-          ),
-        ),
-      ),
-    );
-    coll.forEach((c) => drawL.add(drawListItem(c, ctx, c.collectionIcon)));
-    return new ListView(padding: EdgeInsets.zero, children: drawL);
-  }
-
   void refresh() {
     fxBloc.fetchAllMYFX();
   }
@@ -132,13 +130,21 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        drawer: MamakCommons.getMamakDrawer(
-            _drawerList(ctx, MamakCommons.getDefaultCollections())),
+        drawer: mamakCommons.getMamakDrawer(ctx),
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                tooltip: 'Search',
+                onPressed: (() {
+                  this.showBottomModal(ctx);
+                }))
+          ],
           bottom: TabBar(
             tabs: [Text('TT'), Text('NOTES')],
             onTap: (x) {
               setState(() {
+                fxBloc.currentFilter="";
                 this.refresh();
               });
             },
@@ -160,7 +166,10 @@ class FXAdvisorLayoutMY extends StatefulWidget {
   final String collectionName;
 
   FXAdvisorLayoutMY({Key key, @required this.collectionName}) : super(key: key);
-
+  
   @override
-  FXAdvisorLayoutMYState createState() => new FXAdvisorLayoutMYState();
+  FXAdvisorLayoutMYState createState(){
+    fxBloc.currentFilter="";
+    return new FXAdvisorLayoutMYState();
+  } 
 }

@@ -26,4 +26,7 @@ class MamakStyles {
   static TextStyle paddingSubTitleStyle() {
     return TextStyle(fontSize: 11, color: Colors.grey, height: 1.0);
   }
+  static TextStyle buttonTextStyle(){
+     return const TextStyle(color: Colors.white10, height: 1.0);
+  }
 }
