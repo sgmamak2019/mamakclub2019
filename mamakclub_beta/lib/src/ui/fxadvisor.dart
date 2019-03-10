@@ -6,6 +6,10 @@ import 'package:mamakclub_beta/src/ui/mamakcard.dart';
 import 'package:mamakclub_beta/src/blocs/fxbloc.dart';
 
 class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
+  //the bloody page, calls buildBody everytime a state change within the widgets
+  //i.e if i submit field by pressing enter on the search.
+  String currentFilter="";
+
   Widget _buildListItem(BuildContext context, FX data) {
     return new MamakCard(
         cardTitle: data.documentId,
@@ -23,13 +27,11 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
          height: 1.0
       ),
       onChanged: (text) {
-        fxBloc.fetchAllSGFXFilter(text);
+        currentFilter = text;
+        fxBloc.fetchAllSGFXFilter(currentFilter);
       },
      );
-    //child: TextBox('Prices snapped at : ' + datax.snap_nice_date,
-    //  style: MamakStyles.headerFooterSmallStyle()));
   }
-
   Widget _buildInfo(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
         stream: Firestore.instance
@@ -40,7 +42,6 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
           return _buildFirstLine(snapshot.data);
         });
   }
-
   Widget _buildList(List<FX> snapshot) {
     List<Widget> forBuilding = new List<Widget>();
     forBuilding.add(_buildInfo(context));
@@ -52,7 +53,10 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
   }
 
   Widget _buildBody(BuildContext context, String collectionName) {
-    fxBloc.fetchAllSGFX();
+    if(currentFilter==""){
+      //if filter is in place, do not make a call to firestore.
+      fxBloc.fetchAllSGFX();
+    }
     return new Container(
         child: StreamBuilder(
             stream: fxBloc.allSGFx,
@@ -65,7 +69,6 @@ class FXAdvisorLayoutState extends State<FXAdvisorLayout> {
               return Center(child: CircularProgressIndicator());
             }));
   }
-
   @override
   Widget build(BuildContext ctx) {
     return _buildBody(ctx, widget.collectionName);

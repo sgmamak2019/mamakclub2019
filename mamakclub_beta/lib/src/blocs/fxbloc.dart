@@ -10,7 +10,8 @@ class FXBloc {
   final _fxMYFetcher = PublishSubject<FXRecord>();
   List<FX> fxSGLocal;
   List<FX> fxMYLocal;
- Observable<FXRecord> get allSGFx => _fxSGFetcher.stream;
+
+  Observable<FXRecord> get allSGFx => _fxSGFetcher.stream;
   Observable<FXRecord> get allMYFx => _fxMYFetcher.stream;
   // "=>" means left side will do what right side does.
   //3. Expose a public method that will use repository to get dataq
@@ -23,6 +24,7 @@ class FXBloc {
   }
 
   fetchAllSGFXFilter(String currency) {
+    
     FXRecord returnee = new FXRecord();
     returnee.items = narrowDown(fxSGLocal, currency);
     //for some reason the iterators ForEach, .where((x)=> doesn't allow me to put conditions inside/)
