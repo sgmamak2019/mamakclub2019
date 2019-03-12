@@ -14,8 +14,8 @@ class FXBloc {
 
   Observable<FXRecord> get allSGFx => _fxSGFetcher.stream;
   Observable<FXRecord> get allMYFx => _fxMYFetcher.stream;
-  // "=>" means left side will do what right side does.
-  //3. Expose a public method that will use repository to get dataq
+
+  
   fetchAllSGFX() async {
     FXRecord returnee = new FXRecord();
     List<FX> tpost = await _repository.fetchFX('fx');

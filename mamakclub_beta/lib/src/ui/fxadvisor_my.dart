@@ -7,7 +7,6 @@ import 'package:mamakclub_beta/mamakcommons.dart';
 import 'package:mamakclub_beta/src/blocs/fxbloc.dart';
 
 class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
-
   MamakCommons mamakCommons = MamakCommons();
   void showBottomModal(BuildContext ctx) {
     showModalBottomSheet(
@@ -25,7 +24,11 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
                     autofocus: true,
                     onChanged: (text) {
                       fxBloc.currentFilter = text;
-                      fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+                      if (widget.collectionName == "fx_my") {
+                        fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+                      }else{
+                        fxBloc.fetchAllSGFXFilter(fxBloc.currentFilter);
+                      }
                     },
                   )));
         });
@@ -81,7 +84,11 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
         FlatButton(
           onPressed: () {
             fxBloc.currentFilter = "";
-            fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+            if(widget.collectionName=="fx_my"){
+              fxBloc.fetchAllMYFXFilter(fxBloc.currentFilter);
+            }else{
+              fxBloc.fetchAllSGFXFilter(fxBloc.currentFilter);
+            }
           },
           color: Colors.blueGrey,
           padding: EdgeInsets.all(10.0),
@@ -96,9 +103,7 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
       );
     }
     forBuilding.add(_buildInfo(context));
-
-    forBuilding
-        .addAll(snapshot.map((data) => _buildListItem(data, mode)).toList());
+    forBuilding.addAll(snapshot.map((data) => _buildListItem(data, mode)).toList());
 
     return ListView(
         padding: const EdgeInsets.only(top: 20.0), children: forBuilding);
@@ -106,11 +111,11 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
 
   Widget _buildBody(String collectionName, String mode) {
     if (fxBloc.currentFilter == "") {
-      fxBloc.fetchAllMYFX();
+      this.refresh();
     }
     return new Container(
         child: StreamBuilder(
-            stream: fxBloc.allMYFx,
+            stream: widget.collectionName=="fx"? fxBloc.allSGFx : fxBloc.allMYFx ,
             builder: (context, AsyncSnapshot<FXRecord> snapshot) {
               if (snapshot.hasData) {
                 return _buildList(snapshot.data.items, mode);
@@ -122,11 +127,14 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
   }
 
   void refresh() {
-    fxBloc.fetchAllMYFX();
+    if (widget.collectionName == "fx_my") {
+      fxBloc.fetchAllMYFX();
+    } else {
+      fxBloc.fetchAllSGFX();
+    }
   }
 
-  @override
-  Widget build(BuildContext ctx) {
+  Widget getTabbedScaffold(BuildContext ctx) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -144,7 +152,7 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
             tabs: [Text('TT'), Text('NOTES')],
             onTap: (x) {
               setState(() {
-                fxBloc.currentFilter="";
+                fxBloc.currentFilter = "";
                 this.refresh();
               });
             },
@@ -160,16 +168,39 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
       ),
     );
   }
+
+  Widget getStandardScaffold(BuildContext ctx) {
+    return Scaffold(
+        drawer: mamakCommons.getMamakDrawer(ctx),
+        appBar: AppBar(title: Text('FX [SG]'), actions: [
+          IconButton(
+              icon: Icon(Icons.search),
+              tooltip: 'Search',
+              onPressed: (() {
+                this.showBottomModal(ctx);
+              }))
+        ]),
+        body: _buildBody("fx", "TT"));
+  }
+
+  @override
+  Widget build(BuildContext ctx) {
+    if (widget.collectionName == "fx") {
+      return getStandardScaffold(ctx);
+    } else {
+      return getTabbedScaffold(ctx);
+    }
+  }
 }
 
 class FXAdvisorLayoutMY extends StatefulWidget {
   final String collectionName;
 
   FXAdvisorLayoutMY({Key key, @required this.collectionName}) : super(key: key);
-  
+
   @override
-  FXAdvisorLayoutMYState createState(){
-    fxBloc.currentFilter="";
+  FXAdvisorLayoutMYState createState() {
+    fxBloc.currentFilter = "";
     return new FXAdvisorLayoutMYState();
-  } 
+  }
 }

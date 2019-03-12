@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mamakclub_beta/src/models/collection.dart';
-import 'package:mamakclub_beta/src/ui/fxadvisor.dart';
 import 'package:mamakclub_beta/src/ui/fxadvisor_my.dart';
 import 'package:mamakclub_beta/src/ui/trafficcams.dart';
 import 'package:mamakclub_beta/src/ui/petroladvisor.dart';
@@ -47,10 +46,8 @@ class MamakCommons {
   Widget _viewResolver(String colname, String titlen) {
     switch (colname) {
       case "fx_my":
-        return new FXAdvisorLayoutMY(collectionName: colname);
-        break;
       case "fx":
-        return new FXAdvisorLayout(collectionName: colname);
+        return new FXAdvisorLayoutMY(collectionName: colname);
         break;
       case "traffic":
         return new TrafficCamsLayout();
