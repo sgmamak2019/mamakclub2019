@@ -11,9 +11,7 @@ class FXProvider {
   List<FX> toList(List<DocumentSnapshot> snap) {
     List<FX> fxList = new List<FX>();
   
-    snap.forEach((x)=>{
-        fxList.add(FX.fromSnapShot(x))
-    });
+    snap.forEach((x)=>fxList.add(FX.fromSnapShot(x)));
     return fxList;
   }
 }

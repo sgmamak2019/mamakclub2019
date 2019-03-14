@@ -3,44 +3,15 @@ import 'package:mamakclub_beta/src/models/collection.dart';
 import 'package:mamakclub_beta/src/ui/fxadvisor_my.dart';
 import 'package:mamakclub_beta/src/ui/trafficcams.dart';
 import 'package:mamakclub_beta/src/ui/petroladvisor.dart';
-
+import 'package:mamakclub_beta/src/blocs/mainbloc.dart';
+import 'package:mamakclub_beta/src/models/commoditiesmodel.dart';
 class MamakCommons {
-  List<Collection> getDefaultCollections() {
-    List<Collection> collections = new List<Collection>();
-
-    Collection petrol = new Collection();
-    Collection fxsg = new Collection();
-    Collection fxmy = new Collection();
-    Collection fixed_sg = new Collection();
-    Collection fixed_my = new Collection();
-    Collection traffic = new Collection();
-
-    petrol.collectionName = "petrol";
-    petrol.titleName = "Petrol";
-    fxsg.collectionName = "fx";
-    fxsg.collectionIcon = Icons.attach_money;
-    fxsg.titleName = "FX (SG)";
-    fxmy.titleName = "FX (MY)";
-    fxmy.collectionIcon = Icons.attach_money;
-    fxmy.collectionName = "fx_my";
-    fixed_sg.collectionName = "fixed_deposit_sg";
-    fixed_sg.collectionIcon = Icons.account_balance;
-    fixed_sg.titleName = "Fixed Deposit SG";
-    fixed_my.collectionIcon = Icons.account_balance;
-    fixed_my.collectionName = "fixed_deposit_my";
-    fixed_my.titleName = "Fixed Deposit MY";
-    petrol.collectionIcon = Icons.airport_shuttle;
-    collections = new List<Collection>();
-    collections.add(petrol);
-    collections.add(fxsg);
-    collections.add(fxmy);
-   // collections.add(fixed_sg);
-    //collections.add(fixed_my);
-    traffic.collectionIcon = Icons.camera_alt;
-    traffic.collectionName = "traffic";
-    traffic.titleName = "Traffic Cams";
-    collections.add(traffic);
-    return collections;
+  
+  List<Commodities> getDefaultCollections() {
+    CommoditiesRecord rec = new CommoditiesRecord();
+    Future<CommoditiesRecord> record = mainBloc.fetchAllCommodities();
+    record.then((results)=>rec=results);
+    return rec.items;
   }
 
   Widget _viewResolver(String colname, String titlen) {
@@ -59,18 +30,57 @@ class MamakCommons {
   }
 
   Widget drawListItem(
-      Collection collectionData, BuildContext ctx, IconData icon) {
+      Commodities collectionData, BuildContext ctx) {
     return new ListTile(
-        title: Text(collectionData.titleName),
-        leading: Icon(icon),
+        title: Text(collectionData.documentId),
+        //leading: Icon(icon),
         onTap: () {
           Navigator.of(ctx).pop();
           Navigator.of(ctx).push(MaterialPageRoute(
               builder: (BuildContext context) => _viewResolver(
-                  collectionData.collectionName, collectionData.titleName)));
+                  collectionData.documentId, collectionData.commodity)));
         });
   }
+  List<Widget> drawerItemsGen(BuildContext ctx,List<Commodities> r){
+      List<Widget> allWids = new List<Widget>();
+      allWids.add( new Container(
+        height: 100,
+        child: DrawerHeader(
+          child: Column(children: [
+            Text(
+              'Mamak Club',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            )
+          ]),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+          ),
+        ),
+      ),
+    );
+     r.forEach((c) => allWids.add(drawListItem(c, ctx)));
+    return allWids;
 
+  }
+  Widget buildDraw(BuildContext context){
+    mainBloc.fetchAllCommodities();
+    return new Container(
+      child: StreamBuilder(
+      stream:mainBloc.allComms, 
+      builder:(context, AsyncSnapshot<CommoditiesRecord> snapshot){
+        if (snapshot.hasData) {
+          return ListView(
+            children: drawerItemsGen(context,snapshot.data.items),
+          );
+        }else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+        }
+        else{
+           return Center(child: CircularProgressIndicator());
+        }  
+      }
+      ));
+  }
   Widget _drawerList(BuildContext ctx) {
     List<Widget> drawL = new List<Widget>();
     drawL.add(
@@ -91,12 +101,12 @@ class MamakCommons {
     );
     this
         .getDefaultCollections()
-        .forEach((c) => drawL.add(drawListItem(c, ctx, c.collectionIcon)));
+        .forEach((c) => drawL.add(drawListItem(c, ctx)));
     return new ListView(padding: EdgeInsets.zero, children: drawL);
   }
 
   Widget getMamakDrawer(BuildContext ctx) {
-    return new Drawer(child: _drawerList(ctx));
+    return new Drawer(child: buildDraw(ctx));
   }
 
  void getMamakBottomFilter(BuildContext context,Function fn){
