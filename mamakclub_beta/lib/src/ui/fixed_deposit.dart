@@ -107,23 +107,12 @@ class FixedDepositLayoutState extends State<FixedDepositLayout> {
         ]));
   }
 
-    Widget _buildFirstLine(DocumentSnapshot snapshot) {
-    FixedDeposit datax = FixedDeposit.fromSnapShot(snapshot);
-    return new Align(
-        alignment: Alignment.center,
-        child: Text('Prices snapped at : ' + datax.snap_nice_date,
-            style: MamakStyles.headerFooterSmallStyle()));
-    }
 
      Widget _buildInfo(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-        stream: Firestore.instance
-            .document(widget.collectionName + '/_info')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return _buildFirstLine(snapshot.data);
-        });
+       return new Align(
+        alignment: Alignment.center,
+        child: Text('Prices snapped at : ' + widget.snap_nicedate,
+            style: MamakStyles.headerFooterSmallStyle()));
    }
 
     Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
@@ -152,9 +141,9 @@ class FixedDepositLayoutState extends State<FixedDepositLayout> {
 }
 class FixedDepositLayout extends StatefulWidget {
   final String collectionName;
-
+  final String snap_nicedate;
   
-  FixedDepositLayout({Key key,  @required this.collectionName})
+  FixedDepositLayout({Key key,@required this.snap_nicedate,  @required this.collectionName})
       : super(key: key);
 
   @override

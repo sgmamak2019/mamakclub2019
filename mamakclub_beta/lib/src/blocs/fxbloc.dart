@@ -18,7 +18,7 @@ class FXBloc {
   
   fetchAllSGFX() async {
     FXRecord returnee = new FXRecord();
-    List<FX> tpost = await _repository.fetchFX('fx');
+    List<FX> tpost = await _repository.fetchFX('mamak_fx');
     returnee.items = tpost;
     fxSGLocal = tpost;
     _fxSGFetcher.sink.add(returnee);

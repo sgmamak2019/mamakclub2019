@@ -20,23 +20,11 @@ class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
         leftSubTitle: record.price_with_discount_company,
         rightSubTitle: record.price_no_discount_company);
   }
-  Widget _buildFirstLine(DocumentSnapshot snapshot) {
-    Petrol datax = Petrol.fromSnapShot(snapshot);
+  Widget _buildInfo(BuildContext context) {
     return new Align(
         alignment: Alignment.center,
-        child: Text('Prices snapped at : ' + datax.snap_nicedate,
+        child: Text('Prices snapped at : ' + widget.snap_nicedate,
             style: MamakStyles.headerFooterSmallStyle()));
-  }
-
-  Widget _buildInfo(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-        stream: Firestore.instance
-            .document(widget.collectionName + '/_info')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return _buildFirstLine(snapshot.data);
-        });
   }
 
   Widget _buildList(List<Petrol> snapshot) {
@@ -79,8 +67,9 @@ class PetrolAdvisorLayoutState extends State<PetrolAdvisorLayout> {
   }
 }
 class PetrolAdvisorLayout extends StatefulWidget {
-  String collectionName = "petrol";
-  PetrolAdvisorLayout({Key key, @required this.collectionName}):super(key:key);
+   String collectionName = "petrol";
+   String snap_nicedate; 
+  PetrolAdvisorLayout({Key key,@required this.snap_nicedate, @required this.collectionName}):super(key:key);
  @override
   PetrolAdvisorLayoutState createState() => new PetrolAdvisorLayoutState();
 }

@@ -57,24 +57,11 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
           rightSubTitle: record.sell_notes_company);
     }
   }
-
-  Widget _buildFirstLine(DocumentSnapshot snapshot) {
-    FX datax = FX.fromSnapShot(snapshot);
-    return new Align(
-        alignment: Alignment.center,
-        child: Text('Prices snapped at : ' + datax.snap_nice_date,
-            style: MamakStyles.headerFooterSmallStyle()));
-  }
-
   Widget _buildInfo(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-        stream: Firestore.instance
-            .document(widget.collectionName + '/_info')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return _buildFirstLine(snapshot.data);
-        });
+     return new Align(
+        alignment: Alignment.center,
+        child: Text('Prices snapped at : ' + widget.snap_nicedate,
+            style: MamakStyles.headerFooterSmallStyle()));
   }
 
   Widget _buildList(List<FX> snapshot, String mode) {
@@ -195,8 +182,9 @@ class FXAdvisorLayoutMYState extends State<FXAdvisorLayoutMY> {
 
 class FXAdvisorLayoutMY extends StatefulWidget {
   final String collectionName;
+  final String snap_nicedate;
 
-  FXAdvisorLayoutMY({Key key, @required this.collectionName}) : super(key: key);
+  FXAdvisorLayoutMY({Key key,@required this.snap_nicedate, @required this.collectionName}) : super(key: key);
 
   @override
   FXAdvisorLayoutMYState createState() {

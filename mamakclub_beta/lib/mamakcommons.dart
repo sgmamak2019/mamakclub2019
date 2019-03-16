@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mamakclub_beta/src/models/collection.dart';
 import 'package:mamakclub_beta/src/ui/fxadvisor_my.dart';
 import 'package:mamakclub_beta/src/ui/trafficcams.dart';
 import 'package:mamakclub_beta/src/ui/petroladvisor.dart';
@@ -7,25 +6,21 @@ import 'package:mamakclub_beta/src/blocs/mainbloc.dart';
 import 'package:mamakclub_beta/src/models/commoditiesmodel.dart';
 class MamakCommons {
   
-  List<Commodities> getDefaultCollections() {
-    CommoditiesRecord rec = new CommoditiesRecord();
-    Future<CommoditiesRecord> record = mainBloc.fetchAllCommodities();
-    record.then((results)=>rec=results);
-    return rec.items;
-  }
-
-  Widget _viewResolver(String colname, String titlen) {
+  Widget _viewResolver(String colname, String titlen,String snap) {
     switch (colname) {
       case "fx_my":
       case "fx":
-        return new FXAdvisorLayoutMY(collectionName: colname);
+        return new FXAdvisorLayoutMY(collectionName: colname,snap_nicedate:snap);
         break;
       case "traffic":
         return new TrafficCamsLayout();
         break;
       case "petrol":
-        return new PetrolAdvisorLayout(collectionName: colname);
+        return new PetrolAdvisorLayout(collectionName: colname,snap_nicedate: snap);
         break;
+      default :
+       return new PetrolAdvisorLayout(collectionName: colname,snap_nicedate: snap);
+      break;
     }
   }
 
@@ -38,7 +33,7 @@ class MamakCommons {
           Navigator.of(ctx).pop();
           Navigator.of(ctx).push(MaterialPageRoute(
               builder: (BuildContext context) => _viewResolver(
-                  collectionData.documentId, collectionData.commodity)));
+                  collectionData.documentId, collectionData.commodity_desc,collectionData.snap_nicedate)));
         });
   }
   List<Widget> drawerItemsGen(BuildContext ctx,List<Commodities> r){
@@ -63,49 +58,29 @@ class MamakCommons {
 
   }
   Widget buildDraw(BuildContext context){
-    mainBloc.fetchAllCommodities();
+    if(mainBloc.hasLoaded==false){
+      mainBloc.fetchAllCommodities();
+    }
     return new Container(
       child: StreamBuilder(
       stream:mainBloc.allComms, 
-      builder:(context, AsyncSnapshot<CommoditiesRecord> snapshot){
-        if (snapshot.hasData) {
-          return ListView(
-            children: drawerItemsGen(context,snapshot.data.items),
+      builder:(context, AsyncSnapshot<List<Commodities>> snapshot){
+      
+        if(snapshot.hasData){
+          return new ListView(
+            children: this.drawerItemsGen(context,snapshot.data),
           );
-        }else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
         }
         else{
-           return Center(child: CircularProgressIndicator());
-        }  
+         return new ListView(
+            children: this.drawerItemsGen(context,mainBloc.localComms),
+          );
+        }
+      
       }
       ));
   }
-  Widget _drawerList(BuildContext ctx) {
-    List<Widget> drawL = new List<Widget>();
-    drawL.add(
-      new Container(
-        height: 100,
-        child: DrawerHeader(
-          child: Column(children: [
-            Text(
-              'Mamak Club',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            )
-          ]),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-          ),
-        ),
-      ),
-    );
-    this
-        .getDefaultCollections()
-        .forEach((c) => drawL.add(drawListItem(c, ctx)));
-    return new ListView(padding: EdgeInsets.zero, children: drawL);
-  }
-
-  Widget getMamakDrawer(BuildContext ctx) {
+ Widget getMamakDrawer(BuildContext ctx) {
     return new Drawer(child: buildDraw(ctx));
   }
 

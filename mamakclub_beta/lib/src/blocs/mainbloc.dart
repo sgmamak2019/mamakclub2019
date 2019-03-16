@@ -4,15 +4,25 @@ import '../models/commoditiesmodel.dart';
 
 class MainBloc {
   final _repository = MainRepository();
-  final _commsFetcher = PublishSubject<CommoditiesRecord>();
-  Observable<CommoditiesRecord> get allComms => _commsFetcher.stream;
+  final _commsFetcher = PublishSubject<List<Commodities>>();
+  bool hasLoaded = false;
+  List<Commodities> localComms = new List<Commodities>();
 
-  fetchAllCommodities() async {
-    CommoditiesRecord record = new CommoditiesRecord();
-    List<Commodities> comList = await _repository.fetchComms();
-    record.items = comList;
-    _commsFetcher.sink.add(record);
+  Observable<List<Commodities>> get allComms => _commsFetcher.stream;
+   fetchAllCommodities() async {
+   
+    _repository.fetchComms().then((onValue){
+      this.hasLoaded = true;
+      localComms.removeRange(0, localComms.length);
+      localComms.addAll(onValue);
+      _commsFetcher.sink.add(localComms);
+    });
+   
   }
+  updateComms() async {
+    _commsFetcher.sink.add(localComms);
+  }
+ 
 }
 
 final MainBloc mainBloc = MainBloc();

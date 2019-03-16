@@ -4,8 +4,7 @@ import 'package:mamakclub_beta/src/models/commoditiesmodel.dart';
 
 class MainProvider {
   Future<List<Commodities>> fetch() async {
-    final resp =
-        await Firestore.instance.collection('mamak_commodities').getDocuments();
+    final resp = await Firestore.instance.collection('mamak_commodities').getDocuments();
     return toList(resp.documents);
   }
 
