@@ -7,11 +7,9 @@ class MainProvider {
     final resp = await Firestore.instance.collection('mamak_commodities').getDocuments();
     return toList(resp.documents);
   }
-
   List<Commodities> toList(List<DocumentSnapshot> snap) {
     List<Commodities> comList = new List<Commodities>();
     snap.forEach((x) => comList.add(Commodities.fromSnapShot(x)));
     return comList;
   }
- 
 }

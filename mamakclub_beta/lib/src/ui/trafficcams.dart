@@ -21,7 +21,6 @@ class TrafficCamsLayoutState extends State<TrafficCamsLayout> {
         ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     trafficCamBloc.fetchAllCams();

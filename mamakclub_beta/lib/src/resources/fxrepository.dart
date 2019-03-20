@@ -5,5 +5,4 @@ import 'package:mamakclub_beta/src/resources/fxprovider.dart';
 class FXRepository {
   final FXProvider fxProvider = FXProvider();
   Future<List<FX>> fetchFX(String s) => fxProvider.fetchFXData(s);
-  
-}
+ }

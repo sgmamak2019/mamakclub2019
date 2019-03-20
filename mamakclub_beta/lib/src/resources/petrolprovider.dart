@@ -8,7 +8,6 @@ class PetrolProvider{
      final resp = await Firestore.instance.collection('petrol').getDocuments();
      return toList(resp.documents);
   }
-  
   List<Petrol> toList(List<DocumentSnapshot> snap) {
     List<Petrol> petrolList = new List<Petrol>();
     snap.forEach((x)=>petrolList.add(Petrol.fromSnapShot(x)));

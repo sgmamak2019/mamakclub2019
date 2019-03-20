@@ -7,10 +7,8 @@ class FXProvider {
     final  resp = await Firestore.instance.collection(collection).getDocuments();
     return toList(resp.documents);
  }
-
   List<FX> toList(List<DocumentSnapshot> snap) {
     List<FX> fxList = new List<FX>();
-  
     snap.forEach((x)=>fxList.add(FX.fromSnapShot(x)));
     return fxList;
   }
